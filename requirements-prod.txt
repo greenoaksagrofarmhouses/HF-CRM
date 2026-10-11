@@ -1,0 +1,6 @@
+# Used only on Render (see render.yaml). Local development uses requirements.txt.
+Django==6.1.1
+gunicorn>=23.0
+whitenoise>=6.9
+dj-database-url>=2.3
+psycopg[binary]>=3.2

@@ -1,0 +1,75 @@
+{% load static %}
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#102a2a">
+  <link rel="icon" href="{% static 'img/favicon-32.png' %}" sizes="32x32" type="image/png">
+  <link rel="apple-touch-icon" href="{% static 'img/apple-touch-icon.png' %}">
+  <link rel="manifest" href="{% static 'manifest.json' %}">
+  <title>{% block title %}{{ brand.name }}{% endblock %} · {{ brand.name }}</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="{% static 'css/app.css' %}">
+  {% block extra_head %}{% endblock %}
+</head>
+<body>
+{% if user.is_authenticated %}
+<div class="app-shell">
+  <aside class="sidebar" id="sidebar">
+    <a href="{% url 'dashboard' %}" class="brand-lockup" aria-label="{{ brand.name }} home">
+      <span class="brand-mark"><img src="{% static 'img/logo-mark.png' %}" alt="" width="32" height="32"></span>
+      <span class="brand-copy"><strong>{{ brand.wordmark }}</strong><small>{{ brand.subtitle }}</small></span>
+    </a>
+    <div class="workspace-label">WORKSPACE <span class="workspace-dot"></span></div>
+    <nav class="nav-stack" aria-label="Main navigation">
+      <a href="{% url 'dashboard' %}" class="nav-link {% if request.path == '/' %}active{% endif %}"><span class="nav-icon">▦</span><span>Overview</span><span class="nav-arrow">↗</span></a>
+      <div class="nav-section-label">RELATIONSHIPS</div>
+      <a href="{% url 'lead_list' %}" class="nav-link {% if '/leads/' in request.path %}active{% endif %}"><span class="nav-icon">◎</span><span>Leads</span></a>
+      <a href="{% url 'call_list' %}" class="nav-link {% if '/calls/' in request.path %}active{% endif %}"><span class="nav-icon">◉</span><span>Call activity</span></a>
+      <a href="{% url 'task_list' %}" class="nav-link {% if '/tasks/' in request.path %}active{% endif %}"><span class="nav-icon">☑</span><span>Follow-ups & tasks</span></a>
+      <div class="nav-section-label">PORTFOLIO</div>
+      <a href="{% url 'property_list' %}" class="nav-link {% if '/properties/' in request.path %}active{% endif %}"><span class="nav-icon">⌂</span><span>Properties</span></a>
+      <a href="{% url 'deal_list' %}" class="nav-link {% if '/deals/' in request.path %}active{% endif %}"><span class="nav-icon">◇</span><span>Deals & sales</span></a>
+      <div class="nav-section-label">TOOLS</div>
+      <a href="{% url 'global_search' %}" class="nav-link {% if '/search/' in request.path %}active{% endif %}"><span class="nav-icon">⌕</span><span>Global search</span></a>
+      {% if user.is_staff or user.is_superuser %}<a href="{% url 'admin:index' %}" class="nav-link"><span class="nav-icon">⚙</span><span>Admin settings</span><span class="external-mark">↗</span></a>{% endif %}
+    </nav>
+    <div class="sidebar-bottom">
+      <div class="upgrade-card"><div class="upgrade-spark">✦</div><strong>Built for better deals.</strong><p>Your pipeline, people and properties — together in one calm workspace.</p><span class="upgrade-label">{{ brand.wordmark }} WORKSPACE</span></div>
+      <div class="sidebar-user"><span class="avatar avatar-sidebar">{{ user.first_name|default:user.username|slice:":1"|upper }}</span><span class="sidebar-user-copy"><strong>{{ user.get_full_name|default:user.username }}</strong><small>{% if user.is_superuser %}Workspace owner{% elif user.is_staff %}Team manager{% else %}Property consultant{% endif %}</small></span><form method="post" action="{% url 'logout' %}">{% csrf_token %}<button class="logout-icon" type="submit" aria-label="Log out" title="Log out">⇥</button></form></div>
+    </div>
+  </aside>
+  <main class="main-shell">
+    <header class="topbar">
+      <button class="mobile-menu" id="mobileMenu" aria-label="Open navigation">☰</button>
+      <div class="breadcrumb"><span>Workspace</span><span class="crumb-divider">/</span><strong>{% block breadcrumb %}Overview{% endblock %}</strong></div>
+      <div class="topbar-actions">
+        <form action="{% url 'global_search' %}" method="get" class="top-search"><span>⌕</span><input name="q" placeholder="Search anything..." value="{{ request.GET.q|default:'' }}" aria-label="Search leads, properties, deals"><kbd>↵</kbd></form>
+        <span class="topbar-divider"></span>
+        <span class="top-date">{% now "D, d M" %}</span>
+        <span class="avatar avatar-top">{{ user.first_name|default:user.username|slice:":1"|upper }}</span>
+      </div>
+    </header>
+    <section class="page-content">
+      {% if messages %}<div class="flash-stack">{% for message in messages %}<div class="flash flash-{{ message.tags|default:'info' }}"><span>{{ message }}</span><button type="button" class="flash-close" aria-label="Dismiss message">×</button></div>{% endfor %}</div>{% endif %}
+      {% block content %}{% endblock %}
+      <footer class="page-footer"><span>© {% now "Y" %} {{ brand.name }}</span><span>Clarity in every connection <span class="footer-dot">●</span></span></footer>
+    </section>
+  </main>
+</div>
+{% else %}
+{% block unauthenticated %}{% endblock %}
+{% endif %}
+<script>
+(function(){
+  const menu=document.getElementById('mobileMenu'), sidebar=document.getElementById('sidebar');
+  if(menu&&sidebar){menu.addEventListener('click',()=>sidebar.classList.toggle('sidebar-open'));}
+  document.querySelectorAll('.flash-close').forEach((button)=>button.addEventListener('click',()=>button.closest('.flash').remove()));
+})();
+</script>
+{% block scripts %}{% endblock %}
+</body>
+</html>

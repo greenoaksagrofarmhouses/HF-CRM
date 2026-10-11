@@ -1,0 +1,15 @@
+{
+  "name": "Hartus Floare",
+  "short_name": "Hartus",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#102a2a",
+  "theme_color": "#102a2a",
+  "icons": [
+    {
+      "src": "/static/img/icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ]
+}

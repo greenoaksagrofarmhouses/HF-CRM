@@ -1,0 +1,29 @@
+databases:
+  - name: hartus-floare-db
+    plan: free
+    databaseName: hartus_floare
+    user: hartus_floare
+
+services:
+  - type: web
+    name: hartus-floare-crm
+    runtime: python
+    plan: free
+    buildCommand: pip install -r requirements-prod.txt && python manage.py collectstatic --noinput
+    startCommand: sh -c "python manage.py migrate --noinput && (python manage.py createsuperuser --noinput || true) && gunicorn config.wsgi:application --bind 0.0.0.0:$PORT"
+    healthCheckPath: /accounts/login/
+    envVars:
+      - key: PYTHON_VERSION
+        value: 3.12.8
+      - key: DJANGO_DEBUG
+        value: "0"
+      - key: DJANGO_SECRET_KEY
+        generateValue: true
+      - key: DATABASE_URL
+        fromDatabase:
+          name: hartus-floare-db
+          property: connectionString
+      - key: DJANGO_SUPERUSER_USERNAME
+        value: owner
+      - key: DJANGO_SUPERUSER_PASSWORD
+        sync: false

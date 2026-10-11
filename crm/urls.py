@@ -1,0 +1,30 @@
+from django.urls import path
+from . import views
+
+urlpatterns = [
+    path("", views.DashboardView.as_view(), name="dashboard"),
+    path("search/", views.GlobalSearchView.as_view(), name="global_search"),
+    path("leads/", views.LeadListView.as_view(), name="lead_list"),
+    path("leads/new/", views.LeadCreateView.as_view(), name="lead_create"),
+    path("leads/export/", views.LeadExportView.as_view(), name="lead_export"),
+    path("leads/<int:pk>/", views.LeadDetailView.as_view(), name="lead_detail"),
+    path("leads/<int:pk>/edit/", views.LeadUpdateView.as_view(), name="lead_update"),
+    path("leads/<int:pk>/delete/", views.LeadDeleteView.as_view(), name="lead_delete"),
+    path("calls/", views.CallListView.as_view(), name="call_list"),
+    path("calls/new/", views.CallCreateView.as_view(), name="call_create"),
+    path("properties/", views.PropertyListView.as_view(), name="property_list"),
+    path("properties/new/", views.PropertyCreateView.as_view(), name="property_create"),
+    path("properties/<int:pk>/", views.PropertyDetailView.as_view(), name="property_detail"),
+    path("properties/<int:pk>/edit/", views.PropertyUpdateView.as_view(), name="property_update"),
+    path("properties/<int:pk>/delete/", views.PropertyDeleteView.as_view(), name="property_delete"),
+    path("deals/", views.DealListView.as_view(), name="deal_list"),
+    path("deals/new/", views.DealCreateView.as_view(), name="deal_create"),
+    path("deals/<int:pk>/", views.DealDetailView.as_view(), name="deal_detail"),
+    path("deals/<int:pk>/edit/", views.DealUpdateView.as_view(), name="deal_update"),
+    path("deals/<int:pk>/delete/", views.DealDeleteView.as_view(), name="deal_delete"),
+    path("tasks/", views.TaskListView.as_view(), name="task_list"),
+    path("tasks/new/", views.TaskCreateView.as_view(), name="task_create"),
+    path("tasks/<int:pk>/edit/", views.TaskUpdateView.as_view(), name="task_update"),
+    path("tasks/<int:pk>/delete/", views.TaskDeleteView.as_view(), name="task_delete"),
+    path("tasks/<int:pk>/complete/", views.TaskCompleteView.as_view(), name="task_complete"),
+]

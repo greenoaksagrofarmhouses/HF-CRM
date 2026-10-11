@@ -1,0 +1,17 @@
+{% extends "base.html" %}
+{% load static %}
+{% block title %}Sign in{% endblock %}
+{% block unauthenticated %}
+<div class="login-screen">
+  <div class="login-showcase"><div class="login-brand"><span class="brand-mark"><img src="{% static 'img/logo-mark.png' %}" alt="" width="32" height="32"></span><span class="brand-copy"><strong>{{ brand.wordmark }}</strong><small>{{ brand.subtitle }}</small></span></div>
+    <div class="showcase-copy"><span class="eyebrow light-eyebrow"><i></i> YOUR REAL ESTATE WORKSPACE</span><h1>Make every<br>connection <em>count.</em></h1><p>A clearer view of every lead, every property and every opportunity — built for teams that move business forward.</p><div class="showcase-metrics"><div><strong>360°</strong><span>Client visibility</span></div><div><strong>One</strong><span>Connected pipeline</span></div><div><strong>Always</strong><span>In control</span></div></div></div>
+    <div class="showcase-bottom"><span>RELATIONSHIPS. REAL ESTATE. RESULTS.</span><span>01 — {{ brand.wordmark }}</span></div>
+    <div class="showcase-orb orb-one"></div><div class="showcase-orb orb-two"></div>
+  </div>
+  <div class="login-panel"><div class="login-form-wrap"><img class="login-full-logo" src="{% static 'img/logo-full.png' %}" alt="{{ brand.name }}"><div class="login-step">WELCOME BACK <span>✦</span></div><h2>Sign in to your<br>workspace.</h2><p class="muted">Pick up where you left off.</p>
+    {% if form.errors %}<div class="flash flash-error">Username or password was not recognized. Please try again.</div>{% endif %}
+    <form method="post" class="login-form">{% csrf_token %}<input type="hidden" name="next" value="{{ next }}"><label for="id_username">Username</label><input class="field-control" type="text" name="username" id="id_username" autocomplete="username" autofocus required placeholder="Enter your username"><label for="id_password">Password</label><input class="field-control" type="password" name="password" id="id_password" autocomplete="current-password" required placeholder="Enter your password"><button class="btn btn-primary btn-block" type="submit">Sign in <span>→</span></button></form>
+    <div class="login-security"><span class="security-icon">⌑</span><span><strong>Your workspace, protected.</strong><small>Secure access for your real estate team.</small></span></div><div class="login-copyright">© {% now "Y" %} {{ brand.name }} · Designed for focus.</div>
+  </div></div>
+</div>
+{% endblock %}
